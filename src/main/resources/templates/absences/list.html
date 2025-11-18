@@ -1,0 +1,151 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Gestion des Absences</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold"><i class="fas fa-calendar-times me-2"></i>Gestion des Absences</h2>
+      <p class="text-muted">Suivez et gérez les absences des étudiants</p>
+    </div>
+    <a th:href="@{/absences/create}" class="btn btn-primary btn-lg">
+      <i class="fas fa-plus me-2"></i>Nouvelle Absence
+    </a>
+  </div>
+
+  <!-- Search Cards -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title"><i class="fas fa-calendar-day me-2"></i>Recherche par Date</h6>
+          <form th:action="@{/absences/date}" method="get" class="d-flex">
+            <input type="date" name="date" class="form-control me-2" required>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-filter me-2"></i>Recherche Avancée</h6>
+          <a th:href="@{/absences/search}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-calendar-alt me-2"></i>Par Période
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-chart-pie me-2"></i>Statistiques</h6>
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="text-warning fw-bold" th:text="${totalAbsences != null ? totalAbsences : '0'}">0</div>
+              <small>Total Absences</small>
+            </div>
+            <div class="col-6">
+              <div class="text-success fw-bold" th:text="${justifiedAbsences != null ? justifiedAbsences : '0'}">0</div>
+              <small>Justifiées</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Absences Table -->
+  <div class="card">
+    <div class="card-header bg-transparent">
+      <h5 class="card-title mb-0"><i class="fas fa-list me-2"></i>Liste des Absences</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead>
+          <tr>
+            <th><i class="fas fa-id-card me-2"></i>ID</th>
+            <th><i class="fas fa-calendar me-2"></i>Date</th>
+            <th><i class="fas fa-user me-2"></i>Étudiant</th>
+            <th><i class="fas fa-chalkboard me-2"></i>Classe</th>
+            <th><i class="fas fa-comment me-2"></i>Raison</th>
+            <th><i class="fas fa-check-circle me-2"></i>Statut</th>
+            <th><i class="fas fa-cog me-2"></i>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="absence : ${absences}" class="align-middle">
+            <td class="fw-bold" th:text="${absence.id}"></td>
+            <td>
+              <span class="badge bg-dark" th:text="${absence.date}"></span>
+            </td>
+            <td>
+              <div class="fw-semibold" th:text="${absence.studentName}"></div>
+              <small class="text-muted" th:text="'ID: ' + ${absence.studentId}"></small>
+            </td>
+            <td>
+              <span class="badge bg-primary" th:text="${absence.className}"></span>
+            </td>
+            <td>
+              <span th:if="${absence.reason}" th:text="${absence.reason}"></span>
+              <span th:unless="${absence.reason}" class="text-muted fst-italic">Non spécifiée</span>
+            </td>
+            <td>
+                                    <span th:if="${absence.justified}" class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Justifiée
+                                    </span>
+              <span th:unless="${absence.justified}" class="badge bg-warning">
+                                        <i class="fas fa-clock me-1"></i>Non Justifiée
+                                    </span>
+            </td>
+            <td>
+              <div class="btn-group" role="group">
+                <a th:href="@{/absences/edit/{id}(id=${absence.id})}"
+                   class="btn btn-warning btn-sm">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a th:href="@{/absences/delete/{id}(id=${absence.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette absence ?')">
+                  <i class="fas fa-trash"></i>
+                </a>
+                <a th:if="${!absence.justified}"
+                   th:href="@{/absences/justify/{id}(id=${absence.id}, justified=true)}"
+                   class="btn btn-success btn-sm"
+                   title="Marquer comme justifiée">
+                  <i class="fas fa-check"></i>
+                </a>
+                <a th:if="${absence.justified}"
+                   th:href="@{/absences/justify/{id}(id=${absence.id}, justified=false)}"
+                   class="btn btn-warning btn-sm"
+                   title="Marquer comme non justifiée">
+                  <i class="fas fa-times"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <tr th:if="${absences.empty}">
+            <td colspan="7" class="text-center py-4">
+              <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">Aucune absence enregistrée</h5>
+              <p class="text-muted">Commencez par enregistrer une absence</p>
+              <a th:href="@{/absences/create}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Enregistrer une Absence
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

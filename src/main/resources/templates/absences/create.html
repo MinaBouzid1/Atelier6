@@ -1,0 +1,77 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Enregistrer une Absence</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-calendar-plus me-2"></i>Enregistrer une Nouvelle Absence
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/absences/create}" th:object="${absence}" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="date" class="form-label fw-semibold">
+                                    <i class="fas fa-calendar-alt me-2"></i>Date d'Absence
+                                </label>
+                                <input type="date" class="form-control" id="date"
+                                       th:field="*{date}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="studentId" class="form-label fw-semibold">
+                                    <i class="fas fa-user-graduate me-2"></i>Étudiant
+                                </label>
+                                <select class="form-select" id="studentId" th:field="*{studentId}" required>
+                                    <option value="">Sélectionnez un étudiant</option>
+                                    <option th:each="student : ${students}"
+                                            th:value="${student.id}"
+                                            th:text="${student.fullName + ' - ' + student.className}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reason" class="form-label fw-semibold">
+                                <i class="fas fa-comment-dots me-2"></i>Raison de l'Absence
+                            </label>
+                            <textarea class="form-control" id="reason" th:field="*{reason}"
+                                      rows="4" placeholder="Décrivez la raison de l'absence..."></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="justified"
+                                       th:field="*{justified}" style="transform: scale(1.3);">
+                                <label class="form-check-label fw-semibold" for="justified">
+                                    <i class="fas fa-check-circle me-2"></i>Absence Justifiée
+                                </label>
+                                <small class="form-text text-muted d-block">
+                                    Cochez cette case si l'absence est justifiée (certificat médical, etc.)
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/absences}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Retour
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Enregistrer l'Absence
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

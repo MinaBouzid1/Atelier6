@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Recherche d'Absences</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">
+            <i class="fas fa-search me-2"></i>Recherche Avancée d'Absences
+          </h4>
+        </div>
+        <div class="card-body">
+          <form th:action="@{/absences/search}" method="get" class="row g-3">
+            <div class="col-md-6">
+              <label for="startDate" class="form-label fw-semibold">
+                <i class="fas fa-calendar-start me-2"></i>Date de Début
+              </label>
+              <input type="date" class="form-control" id="startDate"
+                     name="startDate" required>
+            </div>
+            <div class="col-md-6">
+              <label for="endDate" class="form-label fw-semibold">
+                <i class="fas fa-calendar-end me-2"></i>Date de Fin
+              </label>
+              <input type="date" class="form-control" id="endDate"
+                     name="endDate" required>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-search me-2"></i>Rechercher les Absences
+              </button>
+            </div>
+          </form>
+
+          <!-- Results Section -->
+          <div th:if="${absences != null}" class="mt-5">
+            <h5 class="fw-bold mb-3">
+              <i class="fas fa-list me-2"></i>
+              Résultats de la Recherche
+              <span class="badge bg-primary ms-2" th:text="${absences.size()}"></span>
+            </h5>
+
+            <div th:if="${!absences.empty}" class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-dark">
+                <tr>
+                  <th>Date</th>
+                  <th>Étudiant</th>
+                  <th>Classe</th>
+                  <th>Raison</th>
+                  <th>Statut</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="absence : ${absences}">
+                  <td th:text="${absence.date}"></td>
+                  <td th:text="${absence.studentName}"></td>
+                  <td>
+                    <span class="badge bg-primary" th:text="${absence.className}"></span>
+                  </td>
+                  <td th:text="${absence.reason} ?: 'Non spécifiée'"></td>
+                  <td>
+                    <span th:if="${absence.justified}" class="badge bg-success">Justifiée</span>
+                    <span th:unless="${absence.justified}" class="badge bg-warning">Non Justifiée</span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div th:if="${absences.empty}" class="text-center py-4">
+              <i class="fas fa-search fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">Aucune absence trouvée</h5>
+              <p class="text-muted">Aucune absence n'a été trouvée pour la période sélectionnée.</p>
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <a th:href="@{/absences}" class="btn btn-outline-primary">
+              <i class="fas fa-arrow-left me-2"></i>Retour à la Liste
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

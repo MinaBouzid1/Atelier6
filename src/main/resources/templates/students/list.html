@@ -1,0 +1,117 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Gestion des Étudiants</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold"><i class="fas fa-users me-2"></i>Gestion des Étudiants</h2>
+            <p class="text-muted">Managez les informations des étudiants de la maternelle</p>
+        </div>
+        <a th:href="@{/students/create}" class="btn btn-primary btn-lg">
+            <i class="fas fa-plus me-2"></i>Nouvel Étudiant
+        </a>
+    </div>
+
+    <!-- Search Card -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/students/search}" method="get" class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label class="form-label fw-semibold">Rechercher un étudiant</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" name="name" class="form-control" placeholder="Entrez le nom ou prénom...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Rechercher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card">
+        <div class="card-header bg-transparent">
+            <h5 class="card-title mb-0"><i class="fas fa-list me-2"></i>Liste des Étudiants</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead>
+                    <tr>
+                        <th><i class="fas fa-id-card me-2"></i>ID</th>
+                        <th><i class="fas fa-user me-2"></i>Nom Complet</th>
+                        <th><i class="fas fa-birthday-cake me-2"></i>Date de Naissance</th>
+                        <th><i class="fas fa-chalkboard me-2"></i>Classe</th>
+                        <th><i class="fas fa-cog me-2"></i>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="student : ${students}" class="align-middle">
+                        <td class="fw-bold" th:text="${student.id}"></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                     style="width: 40px; height: 40px; font-size: 14px;">
+                                    <span th:text="${student.firstName.substring(0,1) + student.lastName.substring(0,1)}"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold" th:text="${student.firstName + ' ' + student.lastName}"></div>
+                                    <small class="text-muted" th:text="'Étudiant'"></small>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${student.birthDate}"></td>
+                        <td>
+                            <span class="badge bg-primary" th:text="${student.className}"></span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/students/edit/{id}(id=${student.id})}"
+                                   class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a th:href="@{/students/delete/{id}(id=${student.id})}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <a th:href="@{/absences/student/{id}(id=${student.id})}"
+                                   class="btn btn-info btn-sm">
+                                    <i class="fas fa-calendar-times"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${students.empty}">
+                        <td colspan="5" class="text-center py-4">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Aucun étudiant trouvé</h5>
+                            <p class="text-muted">Commencez par ajouter votre premier étudiant</p>
+                            <a th:href="@{/students/create}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Ajouter un Étudiant
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        font-weight: 600;
+    }
+</style>
+</body>
+</html>

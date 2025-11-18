@@ -1,0 +1,95 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Accueil</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- Hero Section -->
+  <div class="jumbotron text-center mb-5">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-4">Bienvenue sur Kindergarten Pro</h1>
+      <p class="lead mb-4">Système moderne de gestion des absences pour écoles maternelles</p>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <a th:href="@{/students}" class="btn btn-light btn-lg w-100">
+                <i class="fas fa-users fa-2x mb-2"></i><br>
+                Gérer les Étudiants
+              </a>
+            </div>
+            <div class="col-md-6">
+              <a th:href="@{/absences}" class="btn btn-light btn-lg w-100">
+                <i class="fas fa-calendar-check fa-2x mb-2"></i><br>
+                Gérer les Absences
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Section -->
+  <div class="row mb-5">
+    <div class="col-md-4">
+      <div class="stats-card">
+        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+        <h3 class="stats-number" th:text="${totalStudents != null ? totalStudents : '0'}">0</h3>
+        <p class="text-muted">Étudiants Inscrits</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stats-card">
+        <i class="fas fa-calendar-times fa-3x text-warning mb-3"></i>
+        <h3 class="stats-number" th:text="${totalAbsences != null ? totalAbsences : '0'}">0</h3>
+        <p class="text-muted">Absences Total</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stats-card">
+        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+        <h3 class="stats-number" th:text="${justifiedAbsences != null ? justifiedAbsences : '0'}">0</h3>
+        <p class="text-muted">Absences Justifiées</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="row">
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+          <h4 class="card-title">Ajouter des Étudiants</h4>
+          <p class="card-text">Enregistrez facilement de nouveaux étudiants avec leurs informations complètes.</p>
+          <a th:href="@{/students/create}" class="btn btn-primary">Commencer</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-clipboard-list fa-3x text-success mb-3"></i>
+          <h4 class="card-title">Suivi des Absences</h4>
+          <p class="card-text">Suivez et gérez les absences des étudiants en temps réel.</p>
+          <a th:href="@{/absences/create}" class="btn btn-success">Enregistrer</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-chart-bar fa-3x text-info mb-3"></i>
+          <h4 class="card-title">Rapports Détaillés</h4>
+          <p class="card-text">Générez des rapports complets sur les absences et la présence.</p>
+          <a th:href="@{/absences}" class="btn btn-info">Voir Rapports</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
