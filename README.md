@@ -2,7 +2,7 @@
 
 Application web de gestion des absences pour école maternelle développée avec **Spring Boot** et **Thymeleaf**.
 
-## 🚀 Fonctionnalités
+##  Fonctionnalités
 
 ### 👥 Gestion des Étudiants
 - ✅ Ajouter de nouveaux étudiants
